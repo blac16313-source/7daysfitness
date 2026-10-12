@@ -1,236 +1,514 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>7DaysFitness | Management</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>7DaysFitness — Gym Management</title>
 <style>
-:root{--bg:#10130f;--sidebar:#0b0e0b;--panel:#171b16;--line:#2b3227;--text:#f1f4eb;--muted:#879080;--lime:#c5f477;--gold:#dec28a}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}
-button,input,select{font:inherit}button{cursor:pointer}
-.app{display:flex;min-height:100vh}
-.sidebar{width:245px;flex-shrink:0;background:var(--sidebar);border-right:1px solid #242a21;padding:27px 17px;display:flex;flex-direction:column}
-.brand{display:flex;align-items:center;gap:12px;padding:0 9px 32px}
-.brand-mark{width:42px;height:42px;background:var(--lime);color:#10150b;border-radius:12px;display:grid;place-items:center;font:800 25px Manrope,sans-serif}
-.brand-name{font:800 15px Manrope,sans-serif}
-.brand-sub{font-size:9px;letter-spacing:1.8px;color:#75806d;margin-top:5px}
-.eyebrow{font-size:9px;letter-spacing:1.7px;color:#78816f;font-weight:700}
-.workspace{padding:0 10px 24px;border-bottom:1px solid #252b22;margin-bottom:26px}
-.workspace-name{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:600;margin-top:12px}
-.dot{height:8px;width:8px;border-radius:50%;background:var(--lime)}
-.nav{display:grid;gap:4px;margin-top:10px}
-.nav-item{border:0;background:transparent;color:#929b8a;text-align:left;padding:12px;border-radius:8px;display:flex;align-items:center;gap:12px;font-size:12px;width:100%}
-.nav-item:hover{background:#181e16;color:white}
-.nav-item.active{background:#20291a;color:var(--lime)}
-.sidebar-bottom{margin-top:auto;padding-top:25px}
-.account{border-top:1px solid #252b22;padding:18px 5px 0;display:flex;align-items:center;gap:10px}
-.avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#2a3522;color:var(--lime);font-size:11px;font-weight:700}
-.account-name{font-size:11px;font-weight:600}
-.account-sub{font-size:10px;color:var(--muted);margin-top:4px}
-.main{flex:1;min-width:0;padding:30px 38px 36px}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:20px;border-bottom:1px solid var(--line);padding-bottom:24px}
-.breadcrumb{font-size:11px;color:var(--muted);margin-bottom:9px}
-.breadcrumb span{color:var(--lime)}
-h1{font:800 27px Manrope,sans-serif;letter-spacing:-.9px}
-.description{font-size:12px;line-height:1.7;color:var(--muted);margin-top:7px}
-.top-actions{display:flex;align-items:center;gap:12px}
-.status{border:1px solid var(--line);padding:9px 12px;border-radius:25px;font-size:10px;color:#b3bba9;display:flex;align-items:center;gap:8px}
-.owner{border-left:1px solid var(--line);padding-left:14px;display:flex;align-items:center;gap:9px}
-.owner strong{display:block;font-size:11px}.owner small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
-.welcome{margin-top:25px;border:1px solid #36442a;border-radius:13px;background:linear-gradient(110deg,#202b19,#171d15 68%,#1b2017);padding:27px 29px;display:flex;justify-content:space-between;align-items:center;gap:20px}
-.welcome-tag{font-size:9px;color:var(--lime);letter-spacing:2px;font-weight:700;margin-bottom:12px}
-.welcome h2{font:800 23px Manrope,sans-serif}
-.welcome p{font-size:12px;line-height:1.8;color:#a2ac97;margin-top:8px;max-width:580px}
-.welcome-side{text-align:right;min-width:140px}.welcome-side strong{display:block;font-size:12px;color:var(--gold);margin-top:8px}
-.section-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:29px 0 14px}
-.section-head h2{font:700 15px Manrope,sans-serif}.section-head p{font-size:11px;color:var(--muted);margin-top:5px}
-.small-note{font-size:10px;color:#859078}
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
-.stat{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:18px;min-height:136px}
-.stat-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
-.stat-label{font-size:11px;color:#a4ad9a}
-.stat-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:9px;background:#26311f;color:var(--lime);font-size:15px}
-.stat-value{font:700 26px Manrope,sans-serif;margin-top:17px}.stat-foot{font-size:10px;color:#7f8976;margin-top:7px}
-.content-grid,.bottom-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:15px}
-.bottom-grid{grid-template-columns:1fr 1fr;margin-top:15px}
-.panel{background:var(--panel);border:1px solid var(--line);border-radius:11px;padding:20px;min-width:0}
-.panel-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line)}
-.panel-header h3{font:700 13px Manrope,sans-serif}.panel-header p{font-size:10px;color:var(--muted);margin-top:5px}
-.panel-tag{font-size:9px;color:#94a086;letter-spacing:1px;text-transform:uppercase}
-.empty{min-height:175px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
-.empty-icon{width:42px;height:42px;display:grid;place-items:center;background:#222a1d;border:1px solid #313a2a;border-radius:12px;color:var(--lime);font-size:18px;margin-bottom:12px}
-.empty h4{font-size:12px}.empty p{font-size:10px;color:var(--muted);line-height:1.8;margin-top:7px;max-width:290px}
-.info-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
-.info-row:last-child{border-bottom:0}.info-left{display:flex;align-items:center;gap:10px;min-width:0}
-.info-icon{width:34px;height:34px;flex-shrink:0;display:grid;place-items:center;border-radius:9px;background:#242c1f;color:var(--lime)}
-.info-left strong{display:block;font-size:11px}.info-left small{display:block;font-size:10px;color:var(--muted);margin-top:4px}
-.info-value{font-size:10px;color:#929b87;text-align:right}
-.footer{display:flex;justify-content:space-between;gap:12px;margin-top:26px;padding-top:17px;border-top:1px solid var(--line);font-size:10px;color:#6e7865}
-.footer strong{color:#a6b09a}
-.btn{border:1px solid #3a4930;background:var(--lime);color:#17200f;padding:10px 14px;border-radius:7px;font-size:11px;font-weight:700}
-.btn-secondary{border:1px solid var(--line);background:#20251d;color:var(--text);padding:10px 13px;border-radius:7px;font-size:11px}
-.page-content{margin-top:25px}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:17px}
-.search{background:var(--panel);border:1px solid var(--line);border-radius:7px;color:var(--text);padding:11px 13px;width:min(340px,100%);font-size:12px}
-.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:680px}
-th{text-align:left;color:#899381;font-size:10px;font-weight:600;padding:13px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
-td{padding:15px 12px;border-bottom:1px solid #272d24;font-size:11px;color:#dfe4d8;white-space:nowrap}
-tbody tr:hover{background:#1b2019}
-.status-pill{display:inline-block;border-radius:20px;padding:5px 8px;font-size:9px;background:#26341e;color:var(--lime)}
-.status-pill.expired{background:#39221f;color:#e58d86}
-.row-action{background:transparent;border:0;color:var(--lime);font-size:11px;padding:4px 5px}
-.page-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}
-.field{display:flex;flex-direction:column;gap:7px}
-.field label{font-size:11px;color:#aab3a0}
-.field input,.field select{width:100%;background:#10140f;color:var(--text);border:1px solid #343c30;border-radius:7px;padding:12px;font-size:12px}
-.form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}
-.form-note{font-size:10px;line-height:1.7;color:var(--muted);margin-top:15px}
-.toast{position:fixed;right:22px;bottom:22px;background:#222b1d;border:1px solid #3b4a30;color:#e9f2df;border-radius:8px;padding:13px 16px;font-size:12px;z-index:100;display:none}
-.hidden{display:none!important}
-@media(max-width:1100px){.sidebar{width:215px}.main{padding:25px 22px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.content-grid{grid-template-columns:1fr}}
-@media(max-width:700px){.sidebar{display:none;position:fixed;inset:0 auto 0 0;width:260px;z-index:50;overflow-y:auto}.sidebar.open{display:flex}.main{padding:18px 14px}.topbar{align-items:flex-start}h1{font-size:22px}.welcome{padding:22px 18px}.welcome h2{font-size:20px}.welcome-side{display:none}.stats{gap:9px}.stat{padding:13px;min-height:124px}.stat-value{font-size:22px}.bottom-grid{grid-template-columns:1fr}.panel{padding:15px}.footer{flex-direction:column}.form-grid{grid-template-columns:1fr}.status{display:none}.owner{padding-left:8px}.owner>div:last-child{display:none}}
+:root {
+  --bg:#101510; --panel:#191f19; --panel2:#202820;
+  --line:#303a30; --text:#f3f5ed; --muted:#9ba699;
+  --lime:#c8f169; --danger:#ff7777;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0; background:var(--bg); color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+button,input,select { font:inherit; }
+button { cursor:pointer; }
+.app { display:flex; min-height:100vh; }
+.sidebar {
+  width:235px; flex-shrink:0; padding:25px 16px;
+  background:#151b15; border-right:1px solid var(--line);
+}
+.brand { display:flex; gap:10px; align-items:center; margin-bottom:38px; }
+.brand-icon {
+  width:40px;height:40px;border-radius:12px;background:var(--lime);
+  color:#11180b;display:grid;place-items:center;font-size:21px;font-weight:900;
+}
+.brand strong { display:block;font-size:15px;letter-spacing:.4px; }
+.brand small { color:var(--muted);font-size:11px;display:block;margin-top:5px; }
+.nav-label {
+  font-size:10px;color:#788373;letter-spacing:1.5px;
+  padding:0 12px;margin:20px 0 10px;
+}
+.nav-btn {
+  width:100%; display:flex;align-items:center;gap:12px;
+  border:0;background:transparent;color:#aab3a6;
+  padding:13px 12px;border-radius:10px;text-align:left;
+  margin-bottom:5px;font-size:13px;
+}
+.nav-btn:hover,.nav-btn.active { background:#293326;color:var(--lime); }
+.nav-icon { width:20px;text-align:center;font-size:16px; }
+.sidebar-bottom {
+  margin-top:45px;padding:15px;border:1px solid var(--line);
+  border-radius:12px;color:var(--muted);font-size:12px;line-height:1.6;
+}
+.sidebar-bottom strong { color:var(--lime); }
+.main { min-width:0;flex:1; }
+.topbar {
+  height:76px;padding:0 30px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;gap:15px;
+}
+.topbar small { color:var(--muted);font-size:11px; }
+.topbar strong { display:block;margin-top:5px;font-size:14px; }
+.profile {
+  display:flex;align-items:center;gap:10px;font-size:12px;
+}
+.avatar {
+  width:36px;height:36px;border-radius:50%;background:#303d2b;
+  color:var(--lime);display:grid;place-items:center;font-weight:bold;
+}
+.content { padding:30px;max-width:1500px;margin:auto; }
+.page { display:block; }
+.hidden { display:none !important; }
+.page-heading {
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:15px;margin-bottom:25px;
+}
+h1 { font-size:27px;margin:0 0 8px;letter-spacing:-.7px; }
+.subtitle { color:var(--muted);font-size:13px;margin:0; }
+.btn {
+  border:1px solid var(--line);border-radius:9px;padding:11px 15px;
+  color:var(--text);background:var(--panel2);font-size:12px;font-weight:700;
+}
+.btn:hover { filter:brightness(1.12); }
+.btn-primary { background:var(--lime);color:#151b0e;border-color:var(--lime); }
+.btn-danger { color:var(--danger); }
+.btn-small { padding:7px 9px;font-size:11px;margin:2px; }
+.stats {
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:15px;margin-bottom:24px;
+}
+.stat,.card {
+  background:var(--panel);border:1px solid var(--line);
+  border-radius:14px;padding:20px;
+}
+.stat-top { display:flex;justify-content:space-between;gap:8px; }
+.stat-label { color:var(--muted);font-size:12px; }
+.stat-icon {
+  width:34px;height:34px;display:grid;place-items:center;
+  background:#293326;border-radius:10px;color:var(--lime);
+}
+.stat-value { font-size:28px;font-weight:700;margin:19px 0 8px; }
+.stat-note { font-size:11px;color:var(--muted); }
+.stat-note span { color:var(--lime); }
+.card { margin-bottom:20px; }
+.card-heading {
+  display:flex;justify-content:space-between;align-items:center;
+  gap:12px;flex-wrap:wrap;margin-bottom:18px;
+}
+.card-heading h2 { font-size:15px;margin:0; }
+.card-heading p { font-size:12px;color:var(--muted);margin:6px 0 0; }
+.search {
+  width:100%;max-width:280px;padding:11px 13px;border-radius:9px;
+  border:1px solid var(--line);background:#111711;color:var(--text);
+  outline:none;
+}
+.search:focus,input:focus,select:focus { border-color:var(--lime); }
+.table-wrap { width:100%;overflow-x:auto; }
+table { width:100%;border-collapse:collapse;min-width:600px; }
+th {
+  color:#899487;font-size:10px;letter-spacing:.8px;text-align:left;
+  padding:13px 12px;border-bottom:1px solid var(--line);
+}
+td { padding:15px 12px;border-bottom:1px solid #293129;font-size:12px; }
+tbody tr:last-child td { border-bottom:0; }
+.empty-state { color:var(--muted);text-align:center;padding:35px 12px; }
+.status {
+  display:inline-block;padding:6px 9px;border-radius:20px;
+  background:#283c25;color:var(--lime);font-size:10px;
+}
+.status.inactive { background:#382a2a;color:#ff9a9a; }
+.quick-grid { display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px; }
+.quick-card {
+  background:var(--panel2);border:1px solid var(--line);
+  padding:18px;border-radius:12px;text-align:left;color:var(--text);
+}
+.quick-card:hover { border-color:var(--lime); }
+.quick-card span { display:block;color:var(--lime);font-size:20px;margin-bottom:14px; }
+.quick-card strong { display:block;font-size:13px; }
+.quick-card small { display:block;color:var(--muted);font-size:11px;margin-top:7px; }
+.form-grid { display:grid;grid-template-columns:1fr 1fr;gap:15px; }
+.form-field { display:flex;flex-direction:column;gap:8px;min-width:0; }
+.form-field span { color:#c1c9bd;font-size:12px; }
+.form-field input,.form-field select {
+  width:100%;min-width:0;padding:12px;border-radius:8px;
+  border:1px solid var(--line);background:#111711;color:var(--text);
+  outline:none;
+}
+.form-field select option { background:#191f19; }
+.form-actions {
+  grid-column:1/-1;display:flex;justify-content:flex-end;
+  gap:10px;margin-top:8px;
+}
+#modal {
+  position:fixed;inset:0;background:#000b;z-index:10;
+  display:flex;align-items:center;justify-content:center;
+  padding:16px;overflow-y:auto;
+}
+.modal-box {
+  width:100%;max-width:570px;background:var(--panel);
+  border:1px solid var(--line);border-radius:16px;padding:23px;
+  margin:auto;
+}
+.modal-heading {
+  display:flex;align-items:center;justify-content:space-between;
+  gap:15px;margin-bottom:22px;
+}
+.modal-heading h2 { margin:0;font-size:19px; }
+.close-btn {
+  background:transparent;border:0;color:var(--muted);font-size:25px;
+}
+.settings-note { color:var(--muted);font-size:12px;line-height:1.8; }
+.mobile-menu { display:none; }
+@media(max-width:900px) {
+  .sidebar { width:190px; }
+  .content { padding:22px; }
+  .stats { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:620px) {
+  .app { display:block; }
+  .sidebar {
+    width:100%;padding:12px;display:flex;align-items:center;gap:7px;
+    overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);
+  }
+  .brand { margin:0 8px 0 0;flex-shrink:0; }
+  .brand-icon { width:34px;height:34px; }
+  .brand strong { font-size:12px; }
+  .brand small { font-size:9px; }
+  .nav-label,.sidebar-bottom { display:none; }
+  .nav-btn {
+    width:auto;flex-shrink:0;padding:10px;font-size:11px;
+    white-space:nowrap;margin:0;gap:6px;
+  }
+  .nav-icon { width:auto; }
+  .topbar { height:65px;padding:0 16px; }
+  .content { padding:19px 13px; }
+  h1 { font-size:23px; }
+  .stats { gap:10px; }
+  .stat { padding:14px; }
+  .stat-value { font-size:23px; }
+  .stat-label { font-size:11px; }
+  .quick-grid { grid-template-columns:1fr; }
+  .form-grid { grid-template-columns:1fr; }
+  .form-actions { grid-column:1; }
+  .search { max-width:none; }
+}
 </style>
 </head>
 <body>
 <div class="app">
-<aside class="sidebar" id="sidebar">
-  <div class="brand"><div class="brand-mark">7</div><div><div class="brand-name">7DaysFitness</div><div class="brand-sub">MANAGEMENT SUITE</div></div></div>
-  <div class="workspace"><div class="eyebrow">CURRENT WORKSPACE</div><div class="workspace-name"><span class="dot"></span>7DaysFitness</div></div>
-  <div class="eyebrow" style="padding:0 12px">MANAGEMENT</div>
-  <nav class="nav">
-    <button class="nav-item active" data-page="Overview">◫ &nbsp; Overview</button>
-    <button class="nav-item" data-page="Members">♙ &nbsp; Members</button>
-    <button class="nav-item" data-page="Staff">♧ &nbsp; Staff</button>
-    <button class="nav-item" data-page="Memberships">▤ &nbsp; Membership plans</button>
-    <button class="nav-item" data-page="Settings">⚙ &nbsp; Settings</button>
-  </nav>
-  <div class="sidebar-bottom"><div class="account"><div class="avatar">OW</div><div><div class="account-name">Owner account</div><div class="account-sub">Demo interface</div></div></div></div>
-</aside>
-<main class="main">
-<header class="topbar">
-  <div><div class="breadcrumb">Workspace / <span id="breadcrumb">Overview</span></div><h1 id="pageTitle">Business overview</h1><p class="description" id="pageDescription">Manage gym members and records in one place.</p></div>
-  <div class="top-actions"><div class="status"><span class="dot"></span>Demo setup</div><div class="owner"><div class="avatar">OW</div><div><strong>Owner access</strong><small>Preview mode</small></div></div></div>
-</header>
-<section id="overviewPage">
-  <section class="welcome"><div><div class="welcome-tag">7DAYSFITNESS · MANAGEMENT</div><h2>Your gym. One workspace.</h2><p>A central place for member registrations, staff records, membership plans and fee information.</p></div><div class="welcome-side"><div class="eyebrow">CURRENT STATUS</div><strong>Demo setup</strong><p class="description">Database connection comes next.</p></div></section>
-  <div class="section-head"><div><h2>At a glance</h2><p>Member records overview</p></div><span class="small-note">Counts update as you add records</span></div>
-  <section class="stats">
-    <article class="stat"><div class="stat-top"><span class="stat-label">Total members</span><span class="stat-icon">♙</span></div><div class="stat-value" id="totalMembers">0</div><div class="stat-foot">Registered members</div></article>
-    <article class="stat"><div class="stat-top"><span class="stat-label">Active memberships</span><span class="stat-icon">✓</span></div><div class="stat-value" id="activeMembers">0</div><div class="stat-foot">Not yet expired</div></article>
-    <article class="stat"><div class="stat-top"><span class="stat-label">Pending fees</span><span class="stat-icon">₹</span></div><div class="stat-value" id="pendingFees">₹0</div><div class="stat-foot">Outstanding balances</div></article>
-    <article class="stat"><div class="stat-top"><span class="stat-label">Staff records</span><span class="stat-icon">♧</span></div><div class="stat-value" id="totalStaff">0</div><div class="stat-foot">Staff listed</div></article>
-  </section>
-  <div class="section-head"><div><h2>Management overview</h2><p>Recent records and membership attention</p></div></div>
-  <section class="content-grid">
-    <article class="panel"><div class="panel-header"><div><h3>Recently added members</h3><p>Latest registrations</p></div><span class="panel-tag">Members</span></div><div id="recentMembers" class="empty"><div class="empty-icon">♙</div><h4>No member records yet</h4><p>New registrations will appear here.</p></div></article>
-    <article class="panel"><div class="panel-header"><div><h3>Membership attention</h3><p>Expiring plans and pending dues</p></div></div><div id="attention" class="empty"><div class="empty-icon">◷</div><h4>No records to review</h4><p>Membership details will appear here after registration.</p></div></article>
-  </section>
-  <section class="bottom-grid">
-    <article class="panel"><div class="panel-header"><div><h3>Management features</h3><p>Included in this demo</p></div></div><div class="info-row"><div class="info-left"><div class="info-icon">♙</div><div><strong>Member records</strong><small>Plans, dates and member IDs</small></div></div><span class="info-value">Included</span></div><div class="info-row"><div class="info-left"><div class="info-icon">♧</div><div><strong>Staff records</strong><small>Contact information</small></div></div><span class="info-value">Included</span></div><div class="info-row"><div class="info-left"><div class="info-icon">₹</div><div><strong>Fee information</strong><small>Total fees and pending balance</small></div></div><span class="info-value">Included</span></div></article>
-    <article class="panel"><div class="panel-header"><div><h3>System status</h3><p>Prototype limitations</p></div></div><div class="info-row"><div class="info-left"><div class="info-icon">◉</div><div><strong>Dashboard interface</strong><small>Ready to preview</small></div></div><span class="info-value">Ready</span></div><div class="info-row"><div class="info-left"><div class="info-icon">▤</div><div><strong>Permanent database</strong><small>Supabase connection</small></div></div><span class="info-value">Next step</span></div><div class="info-row"><div class="info-left"><div class="info-icon">⌑</div><div><strong>Staff accounts</strong><small>Secure sign-in</small></div></div><span class="info-value">Next step</span></div></article>
-  </section>
-</section>
-<section id="membersPage" class="page-content hidden">
-  <div class="page-title-row"><div><h2>Gym members</h2><p class="description">Register and manage member details.</p></div><button class="btn" id="addMemberBtn">+ Add member</button></div>
-  <div class="toolbar" style="margin-top:20px"><input id="memberSearch" class="search" placeholder="Search name, phone or member ID"><span class="small-note" id="memberCount">0 records</span></div>
-  <div class="panel"><div class="table-wrap"><table><thead><tr><th>MEMBER</th><th>UNIQUE ID</th><th>PLAN</th><th>JOINED</th><th>EXPIRY</th><th>PENDING</th><th>STATUS</th><th>ACTION</th></tr></thead><tbody id="membersTable"></tbody></table></div><div id="membersEmpty" class="empty"><div class="empty-icon">♙</div><h4>No members registered</h4><p>Add a member to start building your records.</p></div></div>
-</section>
-<section id="staffPage" class="page-content hidden">
-  <div class="page-title-row"><div><h2>Staff management</h2><p class="description">Manage staff contact records.</p></div><button class="btn" id="addStaffBtn">+ Add staff</button></div>
-  <div class="toolbar" style="margin-top:20px"><input id="staffSearch" class="search" placeholder="Search staff name or phone"><span class="small-note" id="staffCount">0 records</span></div>
-  <div class="panel"><div class="table-wrap"><table style="min-width:560px"><thead><tr><th>STAFF MEMBER</th><th>PHONE</th><th>EMAIL</th><th>ROLE</th><th>ACTION</th></tr></thead><tbody id="staffTable"></tbody></table></div><div id="staffEmpty" class="empty"><div class="empty-icon">♧</div><h4>No staff records yet</h4><p>Add staff contact details here. Secure staff login accounts come later.</p></div></div>
-</section>
-<section id="membershipsPage" class="page-content hidden">
-  <div class="page-title-row"><div><h2>Membership plans</h2><p class="description">Manage plans and fees.</p></div><button class="btn" id="addPlanBtn">+ Add plan</button></div>
-  <div class="bottom-grid" id="plansGrid" style="margin-top:20px"></div>
-</section>
-<section id="settingsPage" class="page-content hidden">
-  <div class="panel" style="max-width:650px"><div class="panel-header"><div><h3>Business details</h3><p>Update the name displayed in the dashboard.</p></div></div><form id="settingsForm" style="padding-top:20px"><div class="field"><label for="gymName">Gym name</label><input id="gymName" value="7DaysFitness" required></div><div class="form-actions"><button class="btn">Save settings</button></div></form></div>
-</section>
-<footer class="footer"><span><strong>7DaysFitness</strong> · Management system</span><span>Prototype · Local browser storage only</span></footer>
-</main>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">7</div>
+      <div>
+        <strong>7DaysFitness</strong>
+        <small>GYM MANAGEMENT</small>
+      </div>
+    </div>
+
+    <div class="nav-label">WORKSPACE</div>
+    <button class="nav-btn active" data-page="overview">
+      <span class="nav-icon">◫</span> Overview
+    </button>
+    <button class="nav-btn" data-page="members">
+      <span class="nav-icon">♙</span> Members
+    </button>
+    <button class="nav-btn" data-page="staff">
+      <span class="nav-icon">♟</span> Staff
+    </button>
+    <button class="nav-btn" data-page="memberships">
+      <span class="nav-icon">▤</span> Memberships
+    </button>
+
+    <div class="nav-label">PREFERENCES</div>
+    <button class="nav-btn" data-page="settings">
+      <span class="nav-icon">⚙</span> Settings
+    </button>
+
+    <div class="sidebar-bottom">
+      <strong>7DaysFitness</strong><br>
+      Your gym. One dashboard.<br>
+      <span>Management workspace</span>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <small>WORKSPACE / <span id="breadcrumb">OVERVIEW</span></small>
+        <strong id="pageTitle">Overview</strong>
+      </div>
+      <div class="profile">
+        <div class="avatar">7D</div>
+        <span>Gym Admin</span>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- OVERVIEW -->
+      <section class="page" id="overviewPage">
+        <div class="page-heading">
+          <div>
+            <h1>Welcome back.</h1>
+            <p class="subtitle">Here's what's happening at your gym.</p>
+          </div>
+          <button class="btn btn-primary" data-open-form="member">+ Add Member</button>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-top"><span class="stat-label">Total Members</span><span class="stat-icon">♙</span></div>
+            <div class="stat-value" id="overviewMembers">0</div>
+            <div class="stat-note">Members in your records</div>
+          </div>
+          <div class="stat">
+            <div class="stat-top"><span class="stat-label">Active Members</span><span class="stat-icon">✓</span></div>
+            <div class="stat-value" id="overviewActive">0</div>
+            <div class="stat-note">Marked as active</div>
+          </div>
+          <div class="stat">
+            <div class="stat-top"><span class="stat-label">Staff Members</span><span class="stat-icon">♟</span></div>
+            <div class="stat-value" id="overviewStaff">0</div>
+            <div class="stat-note">Team records</div>
+          </div>
+          <div class="stat">
+            <div class="stat-top"><span class="stat-label">Plan Value</span><span class="stat-icon">₹</span></div>
+            <div class="stat-value" id="overviewRevenue">₹0</div>
+            <div class="stat-note">Value of active member plans</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-heading">
+            <div>
+              <h2>Quick actions</h2>
+              <p>Go directly to the task you need.</p>
+            </div>
+          </div>
+          <div class="quick-grid">
+            <button class="quick-card" data-open-form="member">
+              <span>＋</span><strong>Add a member</strong>
+              <small>Register a new gym member.</small>
+            </button>
+            <button class="quick-card" data-open-form="staff">
+              <span>♟</span><strong>Add staff</strong>
+              <small>Add a trainer or team member.</small>
+            </button>
+            <button class="quick-card" data-open-form="plan">
+              <span>▤</span><strong>Create membership</strong>
+              <small>Set a plan and its price.</small>
+            </button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-heading">
+            <div><h2>Recent members</h2><p>Your latest member records.</p></div>
+            <button class="btn" data-page="members">View members →</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>NAME</th><th>PHONE</th><th>PLAN</th><th>STATUS</th></tr></thead>
+              <tbody id="recentMembersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- MEMBERS -->
+      <section class="page hidden" id="membersPage">
+        <div class="page-heading">
+          <div><h1>Members</h1><p class="subtitle">Register and manage gym members.</p></div>
+          <button class="btn btn-primary" data-open-form="member">+ Add Member</button>
+        </div>
+        <div class="card">
+          <div class="card-heading">
+            <div><h2>All members</h2><p><span id="memberCount">0</span> records</p></div>
+            <input class="search" id="memberSearch" placeholder="Search members...">
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>NAME</th><th>PHONE</th><th>PLAN</th><th>JOIN DATE</th><th>STATUS</th><th>ACTIONS</th></tr></thead>
+              <tbody id="membersTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- STAFF -->
+      <section class="page hidden" id="staffPage">
+        <div class="page-heading">
+          <div><h1>Staff</h1><p class="subtitle">Manage your trainers and gym team.</p></div>
+          <button class="btn btn-primary" id="addStaffBtn" data-open-form="staff">+ Add Staff</button>
+        </div>
+        <div class="stats" style="grid-template-columns:repeat(2,minmax(0,1fr));">
+          <div class="stat">
+            <div class="stat-top"><span class="stat-label">Total Staff</span><span class="stat-icon">♟</span></div>
+            <div class="stat-value" id="staffCount">0</div>
+            <div class="stat-note">Team members registered</div>
+          </div>
+          <div class="stat">
+            <div class="stat-top"><span class="stat-label">Staff Management</span><span class="stat-icon">✓</span></div>
+            <div class="stat-value" style="font-size:20px;">Ready</div>
+            <div class="stat-note">Add, edit, search and remove staff records</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-heading">
+            <div><h2>Your team</h2><p>Staff details and roles.</p></div>
+            <input class="search" id="staffSearch" placeholder="Search staff...">
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>NAME</th><th>PHONE</th><th>EMAIL</th><th>ROLE</th><th>ACTIONS</th></tr></thead>
+              <tbody id="staffTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- MEMBERSHIP PLANS -->
+      <section class="page hidden" id="membershipsPage">
+        <div class="page-heading">
+          <div><h1>Memberships</h1><p class="subtitle">Manage prices and membership durations.</p></div>
+          <button class="btn btn-primary" data-open-form="plan">+ Add Plan</button>
+        </div>
+        <div class="card">
+          <div class="card-heading">
+            <div><h2>Membership plans</h2><p id="planCount">0 plans</p></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>PLAN NAME</th><th>PRICE</th><th>DURATION</th><th>ACTIONS</th></tr></thead>
+              <tbody id="plansTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="page hidden" id="settingsPage">
+        <div class="page-heading">
+          <div><h1>Settings</h1><p class="subtitle">Dashboard information and storage.</p></div>
+        </div>
+        <div class="card">
+          <div class="card-heading"><div><h2>Gym information</h2><p>Customize the displayed gym name.</p></div></div>
+          <form id="settingsForm" class="form-grid">
+            <label class="form-field">
+              <span>Gym name</span>
+              <input name="gymName" id="gymNameInput" value="7DaysFitness" required>
+            </label>
+            <label class="form-field">
+              <span>Currency</span>
+              <select disabled><option>Indian Rupee (₹)</option></select>
+            </label>
+            <div class="form-actions">
+              <button class="btn btn-primary" type="submit">Save Settings</button>
+            </div>
+          </form>
+        </div>
+        <div class="card">
+          <h2 style="font-size:15px;">About your data</h2>
+          <p class="settings-note">
+            This prototype stores records in this browser on this device.
+            It does not yet provide staff login, cloud synchronization,
+            secure backups or shared access between devices.
+          </p>
+        </div>
+      </section>
+
+    </div>
+  </main>
 </div>
-<div id="toast" class="toast" role="status"></div>
-<div id="modalBackdrop" class="hidden" style="position:fixed;inset:0;background:#000a;z-index:80;align-items:center;justify-content:center;padding:16px;overflow-y:auto">
-<div class="panel" style="width:min(650px,100%);max-height:95vh;overflow-y:auto">
-<div class="panel-header"><div><h3 id="modalTitle">Add record</h3><p id="modalDescription">Enter details below.</p></div><button type="button" id="closeModal" class="btn-secondary">Close</button></div>
-<form id="recordForm" style="padding-top:20px"><div id="formFields" class="form-grid"></div><div id="formNote" class="form-note"></div><div class="form-actions"><button type="button" id="cancelModal" class="btn-secondary">Cancel</button><button type="submit" class="btn">Save record</button></div></form>
-</div></div>
+
+<!-- POP-UP FORM -->
+<div id="modal" class="hidden">
+  <div class="modal-box">
+    <div class="modal-heading">
+      <h2 id="modalTitle">Add record</h2>
+      <button class="close-btn" id="modalClose" type="button" aria-label="Close">&times;</button>
+    </div>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
 <script>
-  
 const $ = id => document.getElementById(id);
 
 let members = JSON.parse(localStorage.getItem("7df_members") || "[]");
 let staff = JSON.parse(localStorage.getItem("7df_staff") || "[]");
 let plans = JSON.parse(localStorage.getItem("7df_plans") || "[]");
+let settings = JSON.parse(localStorage.getItem("7df_settings") || "{}");
 
-let currentForm = null;
+let currentForm = "";
 let editingId = null;
 
-const descriptions = {
+const pageInfo = {
   overview: ["Overview", "Your gym at a glance."],
   members: ["Members", "Manage your gym members."],
-  staff: ["Staff", "Manage your gym team."],
+  staff: ["Staff", "Manage your trainers and team."],
   memberships: ["Memberships", "Manage membership plans."],
-  settings: ["Settings", "Manage your dashboard settings."]
+  settings: ["Settings", "Manage your gym information."]
 };
 
-function saveData() {
-  localStorage.setItem("7df_members", JSON.stringify(members));
-  localStorage.setItem("7df_staff", JSON.stringify(staff));
-  localStorage.setItem("7df_plans", JSON.stringify(plans));
-}
-
-function showPage(page) {
-  document.querySelectorAll(".page").forEach(el => {
-    el.classList.add("hidden");
-  });
-
-  const target = $(page + "Page");
-  if (target) target.classList.remove("hidden");
-
-  document.querySelectorAll("[data-page]").forEach(el => {
-    el.classList.toggle("active", el.dataset.page === page);
-  });
-
-  if ($("breadcrumb")) $("breadcrumb").textContent = page;
-  if ($("pageTitle")) $("pageTitle").textContent = descriptions[page]?.[0] || page;
-  if ($("pageDescription")) {
-    $("pageDescription").textContent = descriptions[page]?.[1] || "";
-  }
-
-  render();
-}
-
 function makeId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  return Date.now().toString(36) + Math.random().toString(36).slice(2);
 }
 
 function escapeHTML(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  })[char]);
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;",
+    '"': "&quot;", "'": "&#39;"
+  })[ch]);
 }
 
 function money(value) {
   return "₹" + Number(value || 0).toLocaleString("en-IN");
 }
 
-function openModal(title, content) {
-  if ($("modalTitle")) $("modalTitle").textContent = title;
-  if ($("modalBody")) $("modalBody").innerHTML = content;
-  if ($("modal")) $("modal").classList.remove("hidden");
+function saveData() {
+  localStorage.setItem("7df_members", JSON.stringify(members));
+  localStorage.setItem("7df_staff", JSON.stringify(staff));
+  localStorage.setItem("7df_plans", JSON.stringify(plans));
+  localStorage.setItem("7df_settings", JSON.stringify(settings));
+}
+
+function showPage(page) {
+  const target = $(page + "Page");
+  if (!target) return;
+
+  document.querySelectorAll(".page").forEach(section => {
+    section.classList.add("hidden");
+  });
+
+  target.classList.remove("hidden");
+
+  document.querySelectorAll(".nav-btn[data-page]").forEach(button => {
+    button.classList.toggle("active", button.dataset.page === page);
+  });
+
+  $("breadcrumb").textContent = page.toUpperCase();
+  $("pageTitle").textContent = pageInfo[page][0];
+
+  render();
+}
+
+function openModal(title, html) {
+  $("modalTitle").textContent = title;
+  $("modalBody").innerHTML = html;
+  $("modal").classList.remove("hidden");
 }
 
 function closeModal() {
-  if ($("modal")) $("modal").classList.add("hidden");
-  currentForm = null;
+  $("modal").classList.add("hidden");
+  $("modalBody").innerHTML = "";
+  currentForm = "";
   editingId = null;
 }
 
@@ -238,16 +516,15 @@ function field(label, name, value = "", type = "text", required = true) {
   return `
     <label class="form-field">
       <span>${escapeHTML(label)}</span>
-      <input
-        name="${escapeHTML(name)}"
+      <input name="${escapeHTML(name)}"
         type="${escapeHTML(type)}"
         value="${escapeHTML(value)}"
         ${required ? "required" : ""}
-      >
+        ${type === "number" ? 'min="0"' : ""}>
     </label>`;
 }
 
-function selectField(label, name, options, selected = "") {
+function selectField(label, name, options, selected) {
   return `
     <label class="form-field">
       <span>${escapeHTML(label)}</span>
@@ -256,29 +533,53 @@ function selectField(label, name, options, selected = "") {
           <option value="${escapeHTML(option.value)}"
             ${String(option.value) === String(selected) ? "selected" : ""}>
             ${escapeHTML(option.label)}
-          </option>`).join("")}
+          </option>
+        `).join("")}
       </select>
     </label>`;
 }
 
 function openForm(type, record = null) {
   currentForm = type;
-  editingId = record?.id || null;
+  editingId = record ? record.id : null;
 
   let title = "";
-  let content = "";
+  let html = "";
+
+  if (type === "staff") {
+    title = record ? "Edit Staff Member" : "Add Staff Member";
+
+    html = `
+      <form id="recordForm" class="form-grid">
+        ${field("Full name", "name", record?.name || "")}
+        ${field("Phone number", "phone", record?.phone || "", "tel")}
+        ${field("Email address", "email", record?.email || "", "email", false)}
+        ${selectField("Role", "role", [
+          {value:"Trainer",label:"Trainer"},
+          {value:"Senior Trainer",label:"Senior Trainer"},
+          {value:"Reception",label:"Reception"},
+          {value:"Manager",label:"Manager"},
+          {value:"Cleaning Staff",label:"Cleaning Staff"},
+          {value:"Other",label:"Other"}
+        ], record?.role || "Trainer")}
+        ${field("Monthly salary (₹)", "salary", record?.salary || "", "number", false)}
+        <div class="form-actions">
+          <button type="button" class="btn" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            ${record ? "Save Changes" : "Add Staff"}
+          </button>
+        </div>
+      </form>`;
+  }
 
   if (type === "member") {
     title = record ? "Edit Member" : "Add Member";
 
     const planOptions = plans.length
-      ? plans.map(plan => ({
-          value: plan.name,
-          label: `${plan.name} — ${money(plan.price)}`
-        }))
-      : [{ value: "Standard", label: "Standard" }];
+      ? plans.map(plan => ({value:plan.name,label:plan.name + " — " + money(plan.price)}))
+      : [{value:"Standard",label:"Standard"}];
 
-    content = `
+    html = `
       <form id="recordForm" class="form-grid">
         ${field("Full name", "name", record?.name || "")}
         ${field("Phone number", "phone", record?.phone || "", "tel")}
@@ -287,36 +588,14 @@ function openForm(type, record = null) {
         ${field("Join date", "joinDate", record?.joinDate || new Date().toISOString().slice(0,10), "date")}
         ${field("Expiry date", "expiryDate", record?.expiryDate || "", "date", false)}
         ${selectField("Status", "status", [
-          { value: "Active", label: "Active" },
-          { value: "Inactive", label: "Inactive" }
+          {value:"Active",label:"Active"},
+          {value:"Inactive",label:"Inactive"}
         ], record?.status || "Active")}
         <div class="form-actions">
-          <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary">${record ? "Save Changes" : "Add Member"}</button>
-        </div>
-      </form>`;
-  }
-
-  if (type === "staff") {
-    title = record ? "Edit Staff Member" : "Add Staff Member";
-
-    content = `
-      <form id="recordForm" class="form-grid">
-        ${field("Full name", "name", record?.name || "")}
-        ${field("Phone number", "phone", record?.phone || "", "tel")}
-        ${field("Email address", "email", record?.email || "", "email", false)}
-        ${selectField("Role", "role", [
-          { value: "Trainer", label: "Trainer" },
-          { value: "Senior Trainer", label: "Senior Trainer" },
-          { value: "Reception", label: "Reception" },
-          { value: "Manager", label: "Manager" },
-          { value: "Cleaning Staff", label: "Cleaning Staff" },
-          { value: "Other", label: "Other" }
-        ], record?.role || "Trainer")}
-        ${field("Monthly salary (₹)", "salary", record?.salary || "", "number", false)}
-        <div class="form-actions">
-          <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary">${record ? "Save Changes" : "Add Staff"}</button>
+          <button type="button" class="btn" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            ${record ? "Save Changes" : "Add Member"}
+          </button>
         </div>
       </form>`;
   }
@@ -324,76 +603,156 @@ function openForm(type, record = null) {
   if (type === "plan") {
     title = record ? "Edit Membership Plan" : "Add Membership Plan";
 
-    content = `
+    html = `
       <form id="recordForm" class="form-grid">
         ${field("Plan name", "name", record?.name || "")}
-        ${field("Price (₹)", "price", record?.price || "", "number")}
-        ${field("Duration (days)", "duration", record?.duration || "30", "number")}
+        ${field("Price (₹)", "price", record?.price ?? "", "number")}
+        ${field("Duration (days)", "duration", record?.duration ?? 30, "number")}
         <div class="form-actions">
-          <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary">${record ? "Save Changes" : "Add Plan"}</button>
+          <button type="button" class="btn" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            ${record ? "Save Changes" : "Add Plan"}
+          </button>
         </div>
       </form>`;
   }
 
-  openModal(title, content);
+  openModal(title, html);
 
-  const form = $("recordForm");
-  if (form) {
-    form.addEventListener("submit", saveForm);
-  }
+  $("recordForm").addEventListener("submit", saveForm);
 }
 
 function saveForm(event) {
   event.preventDefault();
 
-  const form = event.target;
-  const values = Object.fromEntries(new FormData(form).entries());
+  const values = Object.fromEntries(new FormData(event.target).entries());
+  let collection;
 
-  if (currentForm === "member") {
-    const record = {
-      id: editingId || makeId(),
-      ...values
-    };
+  if (currentForm === "staff") collection = staff;
+  if (currentForm === "member") collection = members;
+  if (currentForm === "plan") collection = plans;
 
-    if (editingId) {
-      members = members.map(item => item.id === editingId ? record : item);
-    } else {
-      members.push(record);
-    }
-  }
+  if (!collection) return;
 
-  if (currentForm === "staff") {
-    const record = {
-      id: editingId || makeId(),
-      ...values
-    };
-
-    if (editingId) {
-      staff = staff.map(item => item.id === editingId ? record : item);
-    } else {
-      staff.push(record);
-    }
-  }
+  const record = {
+    ...values,
+    id: editingId || makeId()
+  };
 
   if (currentForm === "plan") {
-    const record = {
-      id: editingId || makeId(),
-      ...values,
-      price: Number(values.price || 0),
-      duration: Number(values.duration || 30)
-    };
+    record.price = Number(values.price || 0);
+    record.duration = Number(values.duration || 30);
+  }
 
-    if (editingId) {
-      plans = plans.map(item => item.id === editingId ? record : item);
-    } else {
-      plans.push(record);
-    }
+  if (editingId) {
+    const index = collection.findIndex(item => item.id === editingId);
+    if (index !== -1) collection[index] = record;
+  } else {
+    collection.push(record);
   }
 
   saveData();
   closeModal();
   render();
+}
+
+function renderMembers() {
+  const query = ($("memberSearch")?.value || "").toLowerCase();
+
+  const filtered = members.filter(member =>
+    [member.name, member.phone, member.email, member.plan]
+      .some(value => String(value || "").toLowerCase().includes(query))
+  );
+
+  $("membersTableBody").innerHTML = filtered.length
+    ? filtered.map(member => `
+      <tr>
+        <td>${escapeHTML(member.name)}</td>
+        <td>${escapeHTML(member.phone)}</td>
+        <td>${escapeHTML(member.plan)}</td>
+        <td>${escapeHTML(member.joinDate || "—")}</td>
+        <td><span class="status ${member.status === "Inactive" ? "inactive" : ""}">
+          ${escapeHTML(member.status || "Active")}
+        </span></td>
+        <td>
+          <button class="btn btn-small" data-edit="member" data-id="${escapeHTML(member.id)}">Edit</button>
+          <button class="btn btn-small btn-danger" data-delete="member" data-id="${escapeHTML(member.id)}">Delete</button>
+        </td>
+      </tr>`).join("")
+    : `<tr><td colspan="6" class="empty-state">No members found. Tap + Add Member to get started.</td></tr>`;
+
+  $("memberCount").textContent = members.length;
+}
+
+function renderStaff() {
+  const query = ($("staffSearch")?.value || "").toLowerCase();
+
+  const filtered = staff.filter(person =>
+    [person.name, person.phone, person.email, person.role]
+      .some(value => String(value || "").toLowerCase().includes(query))
+  );
+
+  $("staffTableBody").innerHTML = filtered.length
+    ? filtered.map(person => `
+      <tr>
+        <td>${escapeHTML(person.name)}</td>
+        <td>${escapeHTML(person.phone)}</td>
+        <td>${escapeHTML(person.email || "—")}</td>
+        <td>${escapeHTML(person.role || "Staff")}</td>
+        <td>
+          <button class="btn btn-small" data-edit="staff" data-id="${escapeHTML(person.id)}">Edit</button>
+          <button class="btn btn-small btn-danger" data-delete="staff" data-id="${escapeHTML(person.id)}">Delete</button>
+        </td>
+      </tr>`).join("")
+    : `<tr><td colspan="5" class="empty-state">No staff members yet. Tap + Add Staff to add your team.</td></tr>`;
+
+  $("staffCount").textContent = staff.length;
+}
+
+function renderPlans() {
+  $("plansTableBody").innerHTML = plans.length
+    ? plans.map(plan => `
+      <tr>
+        <td>${escapeHTML(plan.name)}</td>
+        <td>${money(plan.price)}</td>
+        <td>${escapeHTML(plan.duration)} days</td>
+        <td>
+          <button class="btn btn-small" data-edit="plan" data-id="${escapeHTML(plan.id)}">Edit</button>
+          <button class="btn btn-small btn-danger" data-delete="plan" data-id="${escapeHTML(plan.id)}">Delete</button>
+        </td>
+      </tr>`).join("")
+    : `<tr><td colspan="4" class="empty-state">No plans yet. Tap + Add Plan to create one.</td></tr>`;
+
+  $("planCount").textContent = plans.length + (plans.length === 1 ? " plan" : " plans");
+}
+
+function renderOverview() {
+  $("overviewMembers").textContent = members.length;
+  $("overviewActive").textContent = members.filter(m => m.status === "Active").length;
+  $("overviewStaff").textContent = staff.length;
+
+  const value = members
+    .filter(member => member.status === "Active")
+    .reduce((sum, member) => {
+      const plan = plans.find(item => item.name === member.plan);
+      return sum + Number(plan?.price || 0);
+    }, 0);
+
+  $("overviewRevenue").textContent = money(value);
+
+  const recent = members.slice(-5).reverse();
+
+  $("recentMembersBody").innerHTML = recent.length
+    ? recent.map(member => `
+      <tr>
+        <td>${escapeHTML(member.name)}</td>
+        <td>${escapeHTML(member.phone)}</td>
+        <td>${escapeHTML(member.plan)}</td>
+        <td><span class="status ${member.status === "Inactive" ? "inactive" : ""}">
+          ${escapeHTML(member.status || "Active")}
+        </span></td>
+      </tr>`).join("")
+    : `<tr><td colspan="4" class="empty-state">Your latest members will appear here.</td></tr>`;
 }
 
 function render() {
@@ -403,190 +762,79 @@ function render() {
   renderOverview();
 }
 
-function renderMembers() {
-  const body = $("membersTableBody");
-  if (!body) return;
-
-  const query = ($("memberSearch")?.value || "").toLowerCase();
-
-  const filtered = members.filter(member =>
-    [member.name, member.phone, member.email, member.plan]
-      .some(value => String(value || "").toLowerCase().includes(query))
-  );
-
-  body.innerHTML = filtered.length
-    ? filtered.map(member => `
-      <tr>
-        <td>${escapeHTML(member.name)}</td>
-        <td>${escapeHTML(member.phone)}</td>
-        <td>${escapeHTML(member.plan)}</td>
-        <td>${escapeHTML(member.joinDate || "—")}</td>
-        <td><span class="status ${member.status === "Active" ? "active" : "inactive"}">${escapeHTML(member.status || "Active")}</span></td>
-        <td>
-          <button class="btn btn-small btn-secondary" data-edit-member="${escapeHTML(member.id)}">Edit</button>
-          <button class="btn btn-small btn-danger" data-delete-member="${escapeHTML(member.id)}">Delete</button>
-        </td>
-      </tr>`).join("")
-    : `<tr><td colspan="6" class="empty-state">No members found. Add your first member.</td></tr>`;
-
-  if ($("memberCount")) $("memberCount").textContent = members.length;
-}
-
-function renderStaff() {
-  const body = $("staffTableBody");
-  if (!body) return;
-
-  const query = ($("staffSearch")?.value || "").toLowerCase();
-
-  const filtered = staff.filter(person =>
-    [person.name, person.phone, person.email, person.role]
-      .some(value => String(value || "").toLowerCase().includes(query))
-  );
-
-  body.innerHTML = filtered.length
-    ? filtered.map(person => `
-      <tr>
-        <td>${escapeHTML(person.name)}</td>
-        <td>${escapeHTML(person.phone)}</td>
-        <td>${escapeHTML(person.email || "—")}</td>
-        <td>${escapeHTML(person.role || "Staff")}</td>
-        <td>
-          <button class="btn btn-small btn-secondary" data-edit-staff="${escapeHTML(person.id)}">Edit</button>
-          <button class="btn btn-small btn-danger" data-delete-staff="${escapeHTML(person.id)}">Delete</button>
-        </td>
-      </tr>`).join("")
-    : `<tr><td colspan="5" class="empty-state">No staff members yet. Use “Add Staff” to add your team.</td></tr>`;
-
-  if ($("staffCount")) $("staffCount").textContent = staff.length;
-}
-
-function renderPlans() {
-  const body = $("plansTableBody");
-  if (!body) return;
-
-  body.innerHTML = plans.length
-    ? plans.map(plan => `
-      <tr>
-        <td>${escapeHTML(plan.name)}</td>
-        <td>${money(plan.price)}</td>
-        <td>${escapeHTML(plan.duration)} days</td>
-        <td>
-          <button class="btn btn-small btn-secondary" data-edit-plan="${escapeHTML(plan.id)}">Edit</button>
-          <button class="btn btn-small btn-danger" data-delete-plan="${escapeHTML(plan.id)}">Delete</button>
-        </td>
-      </tr>`).join("")
-    : `<tr><td colspan="4" class="empty-state">No plans yet. Add your first membership plan.</td></tr>`;
-
-  if ($("planCount")) $("planCount").textContent = plans.length;
-}
-
-function renderOverview() {
-  if ($("overviewMembers")) $("overviewMembers").textContent = members.length;
-  if ($("overviewStaff")) $("overviewStaff").textContent = staff.length;
-
-  const active = members.filter(member => member.status === "Active").length;
-  if ($("overviewActive")) $("overviewActive").textContent = active;
-
-  const revenue = members.reduce((sum, member) => {
-    const plan = plans.find(item => item.name === member.plan);
-    return sum + (plan ? Number(plan.price || 0) : 0);
-  }, 0);
-
-  if ($("overviewRevenue")) $("overviewRevenue").textContent = money(revenue);
-}
-
 document.addEventListener("click", event => {
-  const el = event.target.closest("button");
-  if (!el) return;
-
-  if (el.dataset.editMember) {
-    const record = members.find(item => item.id === el.dataset.editMember);
-    if (record) openForm("member", record);
+  const pageButton = event.target.closest("[data-page]");
+  if (pageButton) {
+    showPage(pageButton.dataset.page);
+    return;
   }
 
-  if (el.dataset.deleteMember) {
-    const id = el.dataset.deleteMember;
-    const record = members.find(item => item.id === id);
-
-    if (record && confirm(`Delete member "${record.name}"?`)) {
-      members = members.filter(item => item.id !== id);
-      saveData();
-      render();
-    }
+  const formButton = event.target.closest("[data-open-form]");
+  if (formButton) {
+    openForm(formButton.dataset.openForm);
+    return;
   }
 
-  if (el.dataset.editStaff) {
-    const record = staff.find(item => item.id === el.dataset.editStaff);
-    if (record) openForm("staff", record);
+  if (event.target.closest("#addStaffBtn")) {
+    openForm("staff");
+    return;
   }
 
-  if (el.dataset.deleteStaff) {
-    const id = el.dataset.deleteStaff;
-    const record = staff.find(item => item.id === id);
-
-    if (record && confirm(`Delete staff member "${record.name}"?`)) {
-      staff = staff.filter(item => item.id !== id);
-      saveData();
-      render();
-    }
+  if (event.target.closest("#modalClose") ||
+      event.target.closest("[data-close-modal]")) {
+    closeModal();
+    return;
   }
 
-  if (el.dataset.editPlan) {
-    const record = plans.find(item => item.id === el.dataset.editPlan);
-    if (record) openForm("plan", record);
+  if (event.target.id === "modal") {
+    closeModal();
+    return;
   }
 
-  if (el.dataset.deletePlan) {
-    const id = el.dataset.deletePlan;
-    const record = plans.find(item => item.id === id);
+  const editButton = event.target.closest("[data-edit]");
+  if (editButton) {
+    const type = editButton.dataset.edit;
+    const id = editButton.dataset.id;
+    const collection = type === "staff" ? staff : type === "member" ? members : plans;
+    const record = collection.find(item => item.id === id);
+    if (record) openForm(type, record);
+    return;
+  }
 
-    if (record && confirm(`Delete plan "${record.name}"?`)) {
-      plans = plans.filter(item => item.id !== id);
+  const deleteButton = event.target.closest("[data-delete]");
+  if (deleteButton) {
+    const type = deleteButton.dataset.delete;
+    const id = deleteButton.dataset.id;
+    const collection = type === "staff" ? staff : type === "member" ? members : plans;
+    const record = collection.find(item => item.id === id);
+
+    if (record && confirm("Delete " + (record.name || "this record") + "?")) {
+      if (type === "staff") staff = staff.filter(item => item.id !== id);
+      if (type === "member") members = members.filter(item => item.id !== id);
+      if (type === "plan") plans = plans.filter(item => item.id !== id);
+
       saveData();
       render();
     }
   }
 });
 
-if ($("addMemberBtn")) {
-  $("addMemberBtn").addEventListener("click", () => openForm("member"));
-}
+$("memberSearch").addEventListener("input", renderMembers);
+$("staffSearch").addEventListener("input", renderStaff);
+$("modalClose").addEventListener("click", closeModal);
 
-if ($("addStaffBtn")) {
-  $("addStaffBtn").addEventListener("click", () => openForm("staff"));
-}
+$("settingsForm").addEventListener("submit", event => {
+  event.preventDefault();
+  settings.gymName = $("gymNameInput").value.trim() || "7DaysFitness";
+  saveData();
 
-if ($("addPlanBtn")) {
-  $("addPlanBtn").addEventListener("click", () => openForm("plan"));
-}
-
-if ($("memberSearch")) {
-  $("memberSearch").addEventListener("input", renderMembers);
-}
-
-if ($("staffSearch")) {
-  $("staffSearch").addEventListener("input", renderStaff);
-}
-
-if ($("modalClose")) {
-  $("modalClose").addEventListener("click", closeModal);
-}
-
-if ($("modal")) {
-  $("modal").addEventListener("click", event => {
-    if (event.target === $("modal")) closeModal();
-  });
-}
-
-document.querySelectorAll("[data-page]").forEach(el => {
-  el.addEventListener("click", () => showPage(el.dataset.page));
+  document.querySelector(".brand strong").textContent = settings.gymName;
+  alert("Gym settings saved.");
 });
 
-if ($("settingsForm")) {
-  $("settingsForm").addEventListener("submit", event => {
-    event.preventDefault();
-    alert("Settings saved for this session.");
-  });
+if (settings.gymName) {
+  $("gymNameInput").value = settings.gymName;
+  document.querySelector(".brand strong").textContent = settings.gymName;
 }
 
 render();
