@@ -224,6 +224,9 @@ tbody tr:last-child td { border-bottom:0; }
     <button class="nav-btn" data-page="memberships">
       <span class="nav-icon">▤</span> Memberships
     </button>
+    <button class="nav-btn" data-page="activities">
+      <span class="nav-icon">◎</span> Activities
+    </button>
 
     <div class="nav-label">PREFERENCES</div>
     <button class="nav-btn" data-page="settings">
@@ -392,6 +395,25 @@ tbody tr:last-child td { border-bottom:0; }
         </div>
       </section>
 
+      <!-- ACTIVITIES -->
+      <section class="page hidden" id="activitiesPage">
+        <div class="page-heading">
+          <div><h1>Activities</h1><p class="subtitle">Classes and sports your members can join, like yoga or badminton.</p></div>
+          <button class="btn btn-primary" data-open-form="activity">+ Add Activity</button>
+        </div>
+        <div class="card">
+          <div class="card-heading">
+            <div><h2>Activities</h2><p id="activityCount">0 activities</p></div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>ACTIVITY</th><th>CATEGORY</th><th>INSTRUCTOR</th><th>DURATION</th><th>STATUS</th><th>ACTIONS</th></tr></thead>
+              <tbody id="activitiesTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
       <!-- SETTINGS -->
       <section class="page hidden" id="settingsPage">
         <div class="page-heading">
@@ -445,6 +467,12 @@ let members = JSON.parse(localStorage.getItem("7df_members") || "[]");
 let staff = JSON.parse(localStorage.getItem("7df_staff") || "[]");
 let plans = JSON.parse(localStorage.getItem("7df_plans") || "[]");
 let settings = JSON.parse(localStorage.getItem("7df_settings") || "{}");
+let activities = JSON.parse(localStorage.getItem("7df_activities") || "[]");
+
+const ACTIVITY_SUGGESTIONS = [
+  "Yoga", "Badminton", "Zumba", "Pilates", "Table Tennis",
+  "Swimming", "CrossFit", "Boxing", "Dance", "Cardio"
+];
 
 let currentForm = "";
 let editingId = null;
@@ -454,8 +482,16 @@ const pageInfo = {
   members: ["Members", "Manage your gym members."],
   staff: ["Staff", "Manage your trainers and team."],
   memberships: ["Memberships", "Manage membership plans."],
+  activities: ["Activities", "Classes and sports your gym offers."],
   settings: ["Settings", "Manage your gym information."]
 };
+
+function getCollection(type) {
+  if (type === "staff") return staff;
+  if (type === "member") return members;
+  if (type === "activity") return activities;
+  return plans;
+}
 
 function makeId() {
   return Date.now().toString(36) + Math.random().toString(36).slice(2);
@@ -477,6 +513,7 @@ function saveData() {
   localStorage.setItem("7df_staff", JSON.stringify(staff));
   localStorage.setItem("7df_plans", JSON.stringify(plans));
   localStorage.setItem("7df_settings", JSON.stringify(settings));
+  localStorage.setItem("7df_activities", JSON.stringify(activities));
 }
 
 function showPage(page) {
@@ -617,6 +654,40 @@ function openForm(type, record = null) {
       </form>`;
   }
 
+  if (type === "activity") {
+    title = record ? "Edit Activity" : "Add Activity";
+
+    html = `
+      <form id="recordForm" class="form-grid">
+        <label class="form-field">
+          <span>Activity name</span>
+          <input name="name" list="activitySuggestions"
+            value="${escapeHTML(record?.name || "")}" required>
+          <datalist id="activitySuggestions">
+            ${ACTIVITY_SUGGESTIONS.map(item => `<option value="${escapeHTML(item)}"></option>`).join("")}
+          </datalist>
+        </label>
+        ${selectField("Category", "category", [
+          {value:"Fitness",label:"Fitness"},
+          {value:"Mind & Body",label:"Mind & Body"},
+          {value:"Sports",label:"Sports"},
+          {value:"Other",label:"Other"}
+        ], record?.category || "Fitness")}
+        ${field("Instructor (optional)", "instructor", record?.instructor || "", "text", false)}
+        ${field("Duration (minutes)", "duration", record?.duration ?? 60, "number", false)}
+        ${selectField("Status", "status", [
+          {value:"Active",label:"Active"},
+          {value:"Inactive",label:"Inactive"}
+        ], record?.status || "Active")}
+        <div class="form-actions">
+          <button type="button" class="btn" data-close-modal>Cancel</button>
+          <button type="submit" class="btn btn-primary">
+            ${record ? "Save Changes" : "Add Activity"}
+          </button>
+        </div>
+      </form>`;
+  }
+
   openModal(title, html);
 
   $("recordForm").addEventListener("submit", saveForm);
@@ -631,6 +702,7 @@ function saveForm(event) {
   if (currentForm === "staff") collection = staff;
   if (currentForm === "member") collection = members;
   if (currentForm === "plan") collection = plans;
+  if (currentForm === "activity") collection = activities;
 
   if (!collection) return;
 
@@ -755,10 +827,32 @@ function renderOverview() {
     : `<tr><td colspan="4" class="empty-state">Your latest members will appear here.</td></tr>`;
 }
 
+function renderActivities() {
+  $("activitiesTableBody").innerHTML = activities.length
+    ? activities.map(activity => `
+      <tr>
+        <td>${escapeHTML(activity.name)}</td>
+        <td>${escapeHTML(activity.category || "Other")}</td>
+        <td>${escapeHTML(activity.instructor || "—")}</td>
+        <td>${activity.duration ? escapeHTML(activity.duration) + " min" : "—"}</td>
+        <td><span class="status ${activity.status === "Inactive" ? "inactive" : ""}">
+          ${escapeHTML(activity.status || "Active")}
+        </span></td>
+        <td>
+          <button class="btn btn-small" data-edit="activity" data-id="${escapeHTML(activity.id)}">Edit</button>
+          <button class="btn btn-small btn-danger" data-delete="activity" data-id="${escapeHTML(activity.id)}">Delete</button>
+        </td>
+      </tr>`).join("")
+    : `<tr><td colspan="6" class="empty-state">No activities yet. Tap + Add Activity to add yoga, badminton and more.</td></tr>`;
+
+  $("activityCount").textContent = activities.length + (activities.length === 1 ? " activity" : " activities");
+}
+
 function render() {
   renderMembers();
   renderStaff();
   renderPlans();
+  renderActivities();
   renderOverview();
 }
 
@@ -795,7 +889,7 @@ document.addEventListener("click", event => {
   if (editButton) {
     const type = editButton.dataset.edit;
     const id = editButton.dataset.id;
-    const collection = type === "staff" ? staff : type === "member" ? members : plans;
+    const collection = getCollection(type);
     const record = collection.find(item => item.id === id);
     if (record) openForm(type, record);
     return;
@@ -805,13 +899,14 @@ document.addEventListener("click", event => {
   if (deleteButton) {
     const type = deleteButton.dataset.delete;
     const id = deleteButton.dataset.id;
-    const collection = type === "staff" ? staff : type === "member" ? members : plans;
+    const collection = getCollection(type);
     const record = collection.find(item => item.id === id);
 
     if (record && confirm("Delete " + (record.name || "this record") + "?")) {
       if (type === "staff") staff = staff.filter(item => item.id !== id);
       if (type === "member") members = members.filter(item => item.id !== id);
       if (type === "plan") plans = plans.filter(item => item.id !== id);
+      if (type === "activity") activities = activities.filter(item => item.id !== id);
 
       saveData();
       render();
